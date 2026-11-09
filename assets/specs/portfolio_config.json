@@ -1,145 +1,126 @@
 {
   "projects": [
     {
-      "id": "ignite_biz",
+      "id": "bryde",
+      "order": 0,
+      "tier": "featured",
+      "title": "BRYDE",
+      "role": "Lead Developer — complete system",
+      "meta": "Client project · Complete system build · Mobile + web",
+      "headline": "BRYDE — a two-sided rental marketplace for premium vehicles",
+      "description": "Drivers rent premium cars by the day or month; fleet owners vet drivers, assign vehicles and track what they're owed. I built the whole system: the driver app, the Fleet Owner Portal and the backend that connects them.",
+      "highlights": [
+        "Driver app: browse vehicles, register, rent daily or month-to-month with weekly payments",
+        "Fleet Owner Portal: review driver profiles and ratings, approve drivers, assign vehicles",
+        "Payment and outstanding-balance tracking so owners can follow collections",
+        "One dashboard for vehicles, drivers, rentals and payments"
+      ],
+      "techStack": ["Flutter", "[PORTAL STACK]", "[BACKEND STACK]", "[PAYMENTS]"],
+      "impactMetrics": [],
+      "liveLink": "https://bryde.co",
+      "appStoreLink": "[BRYDE APP STORE URL]",
+      "playStoreLink": "[BRYDE PLAY URL]",
+      "imageAsset": "assets/projects/bryde.webp"
+    },
+    {
+      "id": "one_biz",
       "order": 1,
-      "title": "Ignite (اجنايت)",
-      "role": "Senior Flutter Architect",
-      "description": "Cross-platform business management solution for operations and customer connections. Architected cleanly using the MVVM pattern.",
-      "techStack": ["Flutter", "Provider", "Firebase", "SurePay", "NearPay"],
-      "impactMetrics": ["One Signal Push", "Secure REST APIs"],
-      "liveLink": ""
+      "tier": "case",
+      "title": "One Biz",
+      "role": "Senior Flutter Developer",
+      "meta": "Ignite · Merchant app",
+      "headline": "One Biz — the merchant side of a multi-vendor marketplace",
+      "description": "Sales, bookings and products in one app, with Tabby, Tamara and NearPay payments and offline-first data in Hive.",
+      "highlights": [],
+      "techStack": ["Flutter", "GetX", "Hive", "Firebase"],
+      "impactMetrics": [],
+      "liveLink": "",
+      "appStoreLink": "[ONE BIZ APP STORE URL]",
+      "imageAsset": "assets/projects/one_biz.webp"
     },
     {
       "id": "one_app",
       "order": 2,
+      "tier": "case",
       "title": "ONE App",
-      "role": "Senior Flutter Architect",
-      "description": "All-in-One Lifestyle Solution connecting users with local businesses via shopping, food delivery, service appointments, and ticketing.",
-      "techStack": ["Flutter", "Firebase", "GetX", "iOS/Android"],
-      "impactMetrics": ["Multi-payment connectivity", "Real-time notifications"],
-      "liveLink": ""
+      "role": "Senior Flutter Developer",
+      "meta": "Ignite · Consumer app",
+      "headline": "ONE App — shopping, food, bookings and tickets in one place",
+      "description": "The customer side of the platform: connects users with local businesses, with several payment methods and real-time order notifications.",
+      "highlights": [],
+      "techStack": ["Flutter", "GetX", "Firebase"],
+      "impactMetrics": [],
+      "liveLink": "",
+      "appStoreLink": "[ONE APP APP STORE URL]",
+      "imageAsset": "assets/projects/one_app.webp"
     },
     {
-      "id": "one_biz",
+      "id": "ignite_biz",
       "order": 3,
-      "title": "One Biz",
-      "role": "Senior Flutter Architect",
-      "description": "Designed and developed a multi-vendor solution enabling merchants to manage sales, bookings, and products unified. Integrated Firebase, Tabby, Tamara, Nearpay, geolocations, and PDF generation.",
-      "techStack": ["Flutter", "Dart", "Firebase", "GetX", "Hive", "REST"],
-      "impactMetrics": ["Secure Social Logins", "Payment Gateways", "Offline Storage"],
-      "liveLink": ""
-    },
-    {
-      "id": "doyen",
-      "order": 4,
-      "title": "Doyen Audio Streaming",
+      "tier": "case",
+      "title": "Ignite (اجنايت)",
       "role": "Flutter Developer",
-      "description": "A cross-platform audio streaming app similar to Clubhouse supporting live audio communication seamlessly via Agora.",
-      "techStack": ["Flutter", "Agora SDK", "Firebase", "Provider"],
-      "impactMetrics": ["Scaling Real-time voice streams"],
-      "liveLink": ""
+      "meta": "Ignite · Business management · POS",
+      "headline": "Ignite (اجنايت) — operations and payments for businesses",
+      "description": "Cross-platform business management with SurePay and NearPay terminal payments, built on an MVVM architecture with OneSignal push.",
+      "highlights": [],
+      "techStack": ["Flutter", "Provider", "SurePay", "NearPay"],
+      "impactMetrics": [],
+      "liveLink": "",
+      "appStoreLink": "[IGNITE APP STORE URL]",
+      "imageAsset": "assets/projects/ignite.webp"
     },
-    {
-      "id": "grapevine_go",
-      "order": 5,
-      "title": "GrapevineGO",
-      "role": "Flutter Developer",
-      "description": "A customized treasure hunt app where users locate hidden locations, answer questions, and compete against other teams natively.",
-      "techStack": ["Flutter", "Location Services"],
-      "impactMetrics": ["Interactive UI/UX", "Geolocaton logic"],
-      "liveLink": ""
-    },
-    {
-      "id": "grapevine_quest",
-      "order": 6,
-      "title": "grapevineQUST",
-      "role": "Flutter Developer",
-      "description": "A smartphone-based photo scavenger hunt app where participants engage in location-based mobile photography challenges.",
-      "techStack": ["Flutter", "Hardware APIs"],
-      "impactMetrics": ["Mobile Photography workflow optimized"],
-      "liveLink": "https://grapevineQUEST.com"
-    },
-    {
-      "id": "eds_app",
-      "order": 7,
-      "title": "EDS Employee System",
-      "role": "Flutter Developer",
-      "description": "Employee management system built with Flutter for managing staff data, attendance, payroll, and core HR operations.",
-      "techStack": ["Flutter"],
-      "impactMetrics": ["Enterprise HR efficiency scaled"],
-      "liveLink": ""
-    },
-    {
-      "id": "fsc_room_scanner",
-      "order": 8,
-      "title": "FSC Room Scanner",
-      "role": "Flutter Developer",
-      "description": "A rigorous Flutter-based cleaning record management system designed for hotel staff to track workflow operations.",
-      "techStack": ["Flutter"],
-      "impactMetrics": ["Robust Staff tracking architecture"],
-      "liveLink": ""
-    },
-    {
-      "id": "cyber_private",
-      "order": 9,
-      "title": "Cyber Private",
-      "role": "Flutter Developer",
-      "description": "An online portal app designed for cyber-security awareness allowing users to check breached credentials safely.",
-      "techStack": ["Flutter", "Encryption/Auth"],
-      "impactMetrics": ["Breach detection logic", "Secure APIs"],
-      "liveLink": ""
-    },
-    {
-      "id": "pms",
-      "order": 10,
-      "title": "PMS Tracking",
-      "role": "Flutter Developer",
-      "description": "Project management system designed specifically for bug and issue tracking guaranteeing deep collaborative task efficiency.",
-      "techStack": ["Flutter"],
-      "impactMetrics": ["Fluid teamwork collaboration interface"],
-      "liveLink": ""
-    }
+    { "id": "doyen", "order": 4, "tier": "more", "title": "Doyen", "role": "Flutter Developer", "description": "Live audio rooms, Clubhouse-style, on the Agora SDK", "techStack": ["Flutter", "Agora"], "impactMetrics": [], "liveLink": "" },
+    { "id": "grapevine_go", "order": 5, "tier": "more", "title": "GrapevineGO", "role": "Flutter Developer", "description": "Team treasure hunts with location-based challenges", "techStack": ["Flutter"], "impactMetrics": [], "liveLink": "" },
+    { "id": "grapevine_quest", "order": 6, "tier": "more", "title": "grapevineQUEST", "role": "Flutter Developer", "description": "Photo scavenger hunts built around the camera", "techStack": ["Flutter"], "impactMetrics": [], "liveLink": "https://grapevinequest.com" },
+    { "id": "eds_app", "order": 7, "tier": "more", "title": "EDS Employee System", "role": "Flutter Developer", "description": "Staff records, attendance and payroll", "techStack": ["Flutter"], "impactMetrics": [], "liveLink": "" },
+    { "id": "fsc_room_scanner", "order": 8, "tier": "more", "title": "FSC Room Scanner", "role": "Flutter Developer", "description": "Room-cleaning records for hotel staff", "techStack": ["Flutter"], "impactMetrics": [], "liveLink": "" },
+    { "id": "cyber_private", "order": 9, "tier": "more", "title": "Cyber Private", "role": "Flutter Developer", "description": "Check whether your credentials appear in known breaches", "techStack": ["Flutter"], "impactMetrics": [], "liveLink": "" }
   ],
   "experience": [
+    {
+      "id": "exp_0",
+      "company": "BRYDE",
+      "position": "Lead Developer (client project)",
+      "period": "[START] — now",
+      "accomplishments": [
+        "Built BRYDE's complete platform end to end: driver app, Fleet Owner Portal and backend for vehicle listings, driver approval, rentals and payment tracking."
+      ]
+    },
     {
       "id": "exp_1",
       "company": "Ignite",
       "position": "Senior Flutter Developer",
-      "period": "May 2024 – Present",
+      "period": "2024 — now",
       "accomplishments": [
-        "Architecting complex multi-vendor solutions handling scalable global states mapping through GetX and REST.",
-        "Integrated robust payment gateways (Tabby, Tamara, Nearpay) alongside offline cache environments via Hive."
+        "Lead the Flutter work on One Biz and ONE App: multi-vendor architecture, Tabby / Tamara / NearPay payments, and offline-first data with Hive."
       ]
     },
     {
       "id": "exp_2",
       "company": "Ignite",
       "position": "Flutter Developer",
-      "period": "Aug 2021 – May 2024",
+      "period": "2021 — 2024",
       "accomplishments": [
-        "Developed cross-platform MVVM solutions for business operation and management flows.",
-        "Configured One Signal push notifications intersecting natively with Provider-based UI rendering pipelines."
+        "Built the Ignite business app with MVVM and Provider; integrated SurePay and NearPay terminals and OneSignal push."
       ]
     },
     {
       "id": "exp_3",
       "company": "The Xpertz",
       "position": "Flutter Developer",
-      "period": "Aug 2020 – Aug 2021",
+      "period": "2020 — 2021",
       "accomplishments": [
-        "Built Doyen, an interactive realtime audio streaming platform bridging the Agora SDK for ultra-low latency.",
-        "Engineered smooth cross-platform social authentication and responsive state loops safely using Provider."
+        "Built Doyen, a low-latency live audio app on Agora, plus social sign-in across iOS and Android."
       ]
     },
     {
       "id": "exp_4",
       "company": "The Xpertz",
-      "position": "Intern/Junior Flutter Developer",
-      "period": "May 2020 – July 2020",
+      "position": "Junior Flutter Developer",
+      "period": "2020",
       "accomplishments": [
-        "Specialized in transforming deep PSD/Figma designs into highly fluid pixel-perfect mobile layouts.",
-        "Assimilated standard Dart guidelines focusing rigorously cleanly on responsive UIs and structural formatting."
+        "Turned Figma and PSD designs into pixel-accurate, responsive Flutter screens."
       ]
     }
   ]

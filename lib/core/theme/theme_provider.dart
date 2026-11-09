@@ -3,14 +3,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme_provider.g.dart';
 
+/// Follows the OS setting until the visitor uses the toggle.
 @riverpod
 class ThemeModeNotifier extends _$ThemeModeNotifier {
   @override
-  ThemeMode build() {
-    return ThemeMode.dark; // Unified "Dark/Tech" Design System default
-  }
+  ThemeMode build() => ThemeMode.system;
 
-  void toggleTheme() {
-    state = state == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+  /// Flips whatever is currently on screen (including a system-chosen theme).
+  void toggle(Brightness current) {
+    state = current == Brightness.dark ? ThemeMode.light : ThemeMode.dark;
   }
 }

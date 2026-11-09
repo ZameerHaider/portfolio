@@ -1,186 +1,148 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/theme_provider.dart';
+import 'package:zamir_professional_portfolio/core/theme/app_theme.dart';
+import 'package:zamir_professional_portfolio/features/portfolio/presentation/providers/portfolio_providers.dart';
+import 'package:zamir_professional_portfolio/features/portfolio/presentation/widgets/receipt_card.dart';
 import 'portfolio_scaffold.dart';
 
-class SplashScreen extends ConsumerStatefulWidget {
-  const SplashScreen({super.key});
+/// Shows a small receipt "printing" while projects and experience load, then
+/// cross-fades to the page. Stays at least [minDuration] so the print reads,
+/// and never longer than [maxDuration]. Skipped under reduced motion.
+class SplashGate extends ConsumerStatefulWidget {
+  const SplashGate({
+    super.key,
+    this.minDuration = const Duration(milliseconds: 1300),
+    this.maxDuration = const Duration(seconds: 4),
+  });
+
+  final Duration minDuration;
+  final Duration maxDuration;
 
   @override
-  ConsumerState<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashGate> createState() => _SplashGateState();
 }
 
-class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerProviderStateMixin {
-  late AnimationController _logoController;
-  String _displayedText = "";
-  final String _fullText = "> Initializing Senior Architect Portfolio...";
-  Timer? _typingTimer;
+class _SplashGateState extends ConsumerState<SplashGate> {
+  bool _minElapsed = false;
+  bool _forceDone = false;
+  Timer? _minTimer;
+  Timer? _maxTimer;
 
   @override
   void initState() {
     super.initState();
-    _logoController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2000),
-    );
-    
-    _logoController.forward();
-    _startTyping();
-    _navigateToHome();
-  }
-
-  void _startTyping() {
-    int index = 0;
-    _typingTimer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
-      if (index < _fullText.length) {
-        setState(() {
-          _displayedText += _fullText[index];
-          index++;
-        });
-      } else {
-        _typingTimer?.cancel();
-      }
-    });
-  }
-
-  void _navigateToHome() async {
-    await Future.delayed(const Duration(milliseconds: 4000));
-    if (!mounted) return;
-    
-    Navigator.of(context).pushReplacement(
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 1000),
-        pageBuilder: (context, animation, secondaryAnimation) => const PortfolioScaffold(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          var curve = CurvedAnimation(parent: animation, curve: Curves.easeInOut);
-          return FadeTransition(
-            opacity: curve,
-            child: ScaleTransition(
-              scale: Tween<double>(begin: 0.95, end: 1.0).animate(curve),
-              child: child,
-            ),
-          );
-        },
-      ),
-    );
+    _minTimer = Timer(widget.minDuration, () => setState(() => _minElapsed = true));
+    _maxTimer = Timer(widget.maxDuration, () => setState(() => _forceDone = true));
   }
 
   @override
   void dispose() {
-    _logoController.dispose();
-    _typingTimer?.cancel();
+    _minTimer?.cancel();
+    _maxTimer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDark = ref.watch(themeModeNotifierProvider) == ThemeMode.dark;
-    final primaryColor = isDark ? const Color(0xFF22D3EE) : const Color(0xFF4F46E5);
-    
-    return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Logo Draw Animation
-            SizedBox(
-              width: 100,
-              height: 100,
-              child: AnimatedBuilder(
-                animation: _logoController,
-                builder: (context, child) {
-                  return CustomPaint(
-                    painter: LogoDrawPainter(
-                      progress: _logoController.value,
-                      color: primaryColor,
-                    ),
-                  );
-                },
-              ),
-            )
-            .animate()
-            .shimmer(delay: 2500.ms, duration: 1000.ms),
-            
-            const SizedBox(height: 48),
-            
-            // Terminal typing effect
-            SizedBox(
-              height: 24,
-              child: Text(
-                _displayedText,
-                style: TextStyle(
-                  fontFamily: 'monospace',
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white70 : Colors.black87,
-                  letterSpacing: 1.2,
-                ),
-              ),
-            ),
-            
-            // Animated Cursor
-            const SizedBox(height: 8),
-            Container(
-              width: 12,
-              height: 4,
-              color: primaryColor,
-            )
-            .animate(onPlay: (controller) => controller.repeat())
-            .fade(duration: 500.ms, begin: 0, end: 1, curve: Curves.easeInOutSine),
-          ],
-        ),
-      ),
+    // Watching here starts the data loading behind the splash.
+    final projects = ref.watch(projectsProvider);
+    final experience = ref.watch(experienceProvider);
+    final loaded = !projects.isLoading && !experience.isLoading;
+    final done = context.reduceMotion || _forceDone || (_minElapsed && loaded);
+
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 450),
+      switchInCurve: PortfolioMotion.ease,
+      switchOutCurve: Curves.easeIn,
+      transitionBuilder: (child, anim) => FadeTransition(opacity: anim, child: child),
+      child: done ? const PortfolioScaffold(key: ValueKey('page')) : const SplashScreen(key: ValueKey('splash')),
     );
   }
 }
 
-class LogoDrawPainter extends CustomPainter {
-  final double progress;
-  final Color color;
-
-  LogoDrawPainter({required this.progress, required this.color});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4.0
-      ..strokeCap = StrokeCap.round;
+  State<SplashScreen> createState() => _SplashScreenState();
+}
 
-    final path = Path();
-    
-    // Draw '<'
-    if (progress > 0) {
-      double p1 = (progress * 3).clamp(0.0, 1.0);
-      path.moveTo(size.width * 0.3, size.height * 0.35);
-      path.lineTo(size.width * 0.15, size.height * 0.5);
-      path.lineTo(size.width * 0.3, size.height * 0.65);
-    }
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+  late final AnimationController _progress = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))..forward();
 
-    // Draw '/'
-    if (progress > 0.33) {
-      double p2 = ((progress - 0.33) * 3).clamp(0.0, 1.0);
-      path.moveTo(size.width * 0.6, size.height * 0.25);
-      path.lineTo(size.width * 0.4, size.height * 0.75);
-    }
-
-    // Draw '>'
-    if (progress > 0.66) {
-      double p3 = ((progress - 0.66) * 3).clamp(0.0, 1.0);
-      path.moveTo(size.width * 0.7, size.height * 0.35);
-      path.lineTo(size.width * 0.85, size.height * 0.5);
-      path.lineTo(size.width * 0.7, size.height * 0.65);
-    }
-
-    canvas.drawPath(path, paint);
+  @override
+  void dispose() {
+    _progress.dispose();
+    super.dispose();
   }
 
   @override
-  bool shouldRepaint(covariant LogoDrawPainter oldDelegate) {
-    return oldDelegate.progress != progress || oldDelegate.color != color;
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final text = PortfolioType.mono(size: 13, color: c.paperInk);
+    final subtle = text.copyWith(color: c.paperSubtle, fontSize: 11);
+
+    return Scaffold(
+      backgroundColor: c.ground,
+      body: Center(
+        child: Semantics(
+          label: 'Loading Zameer Haider portfolio',
+          liveRegion: true,
+          child: ExcludeSemantics(
+            child: PrintIn(
+              duration: const Duration(milliseconds: 800),
+              tilt: -1.5,
+              child: Container(
+                width: 260,
+                padding: const EdgeInsets.fromLTRB(22, 22, 22, 24),
+                decoration: BoxDecoration(
+                  color: c.paper,
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: c.paperLine),
+                  boxShadow: [
+                    BoxShadow(color: c.shadow.withValues(alpha: 0.22), offset: const Offset(0, 20), blurRadius: 40, spreadRadius: -20),
+                  ],
+                ),
+                child: AnimatedBuilder(
+                  animation: _progress,
+                  builder: (context, _) {
+                    final t = Curves.easeInOut.transform(_progress.value);
+                    const cells = 16;
+                    final filled = (t * cells).round();
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('ZAMEER HAIDER', textAlign: TextAlign.center, style: text.copyWith(fontWeight: FontWeight.w500, letterSpacing: 1.6)),
+                        const SizedBox(height: 2),
+                        Text('FLUTTER · FINTECH · POS', textAlign: TextAlign.center, style: subtle),
+                        DashedRule(color: c.paperDashed, spacing: 14),
+                        Row(
+                          children: [
+                            Expanded(child: Text('PRINTING PORTFOLIO', style: subtle)),
+                            Text('${(t * 100).round().toString().padLeft(3)}%', style: subtle),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          '${'█' * filled}${'░' * (cells - filled)}',
+                          style: text.copyWith(color: PortfolioColors.light.accent, letterSpacing: 0),
+                          maxLines: 1,
+                          overflow: TextOverflow.clip,
+                        ),
+                        DashedRule(color: c.paperDashed, spacing: 14),
+                        SizedBox(height: 28, child: CustomPaint(painter: BarcodePainter(color: c.paperInk, progress: t))),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

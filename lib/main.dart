@@ -19,14 +19,15 @@ class PortfolioApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeNotifierProvider);
-
     return MaterialApp(
-      title: 'Zameer Portfolio',
-      theme: AppTheme.cleanLightTheme,
-      darkTheme: AppTheme.darkTechTheme,
-      themeMode: themeMode,
-      home: const SplashScreen(),
+      title: 'Zameer Haider — Senior Flutter Developer',
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: ref.watch(themeModeNotifierProvider),
+      // Colours cross-fade when the theme flips.
+      themeAnimationDuration: const Duration(milliseconds: 400),
+      themeAnimationCurve: Curves.easeInOut,
+      home: const SplashGate(),
       debugShowCheckedModeBanner: false,
     );
   }
