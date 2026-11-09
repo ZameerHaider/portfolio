@@ -6,5 +6,5 @@ abstract final class SiteConfig {
   static const String contactEmail = 'mrzameerhaider@gmail.com';
 
   static const String githubUrl = 'https://github.com/ZameerHaider';
-  static const String linkedInUrl = 'https://linkedin.com/in/zameerhaider';
+  static const String linkedInUrl = 'https://www.linkedin.com/in/zameer-haider-bhatti/';
 }
