@@ -6,7 +6,7 @@ part of 'portfolio_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dataServiceHash() => r'5040e4f53d867ad24719331337e7f944cf2790d6';
+String _$dataServiceHash() => r'703079469723b4d36c92277feed7e2897dd5c18a';
 
 /// See also [dataService].
 @ProviderFor(dataService)

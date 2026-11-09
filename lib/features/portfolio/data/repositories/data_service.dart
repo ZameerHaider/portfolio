@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/project.dart';
 import '../../domain/entities/experience.dart';
@@ -55,9 +56,9 @@ class DataService implements IPortfolioRepository {
         await FirebaseFirestore.instance.collection('experience').doc(id.toString()).set(data);
       }
 
-      print('Seeding Complete! Collections cleared and updated.');
+      debugPrint('Seeding Complete! Collections cleared and updated.');
     } catch (e) {
-      print('Seeding Error: $e');
+      debugPrint('Seeding Error: $e');
     }
   }
 

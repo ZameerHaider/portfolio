@@ -1,64 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'glass_container.dart';
+import 'package:zamir_professional_portfolio/core/theme/app_theme.dart';
+import 'common.dart';
 
+class _StackGroup {
+  const _StackGroup(this.label, this.title, this.items, {this.featured = false});
+
+  final String label;
+  final String title;
+  final List<String> items;
+  final bool featured;
+}
+
+const _groups = [
+  _StackGroup('SPECIALTY', 'Hardware & payments',
+      ['Sunmi POS', 'thermal printing', 'HalaPay', 'NearPay', 'SurePay', 'Tabby', 'Tamara'],
+      featured: true),
+  _StackGroup('CORE', 'Flutter & Dart', ['Xcode', 'Android Studio', 'FlutterFlow']),
+  _StackGroup('ARCHITECTURE', 'State & structure',
+      ['Riverpod', 'Bloc', 'GetX', 'Provider', 'Clean Architecture', 'MVVM', 'Server-driven UI']),
+  _StackGroup('BACKEND & RELEASE', 'Cloud & delivery',
+      ['Firebase', 'AWS Amplify', 'REST', 'GraphQL', 'Node.js', 'CI/CD', 'App Store Connect', 'Play Console']),
+];
+
+/// "03 — Stack": surface band with four cards; the first uses the contrast band.
 class SkillsSection extends StatelessWidget {
   const SkillsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, List<String>> skills = {
-      'Core Technologies': ['Flutter', 'Dart', 'Xcode', 'Android Studio', 'FlutterFlow'],
-      'Architecture & State': ['Riverpod', 'Bloc', 'Clean Architecture', 'MVVM', 'Server-Driven UI'],
-      'Networking & Cloud': ['Firebase', 'AWS Amplify', 'RESTful APIs', 'GraphQL', 'Node.js'],
-      'Hardware & Payments': ['Sunmi POS', 'Thermal Printing', 'HalaPay', 'SurePay', 'NearPay'],
-      'Tools & Deployment': ['Git', 'CI/CD', 'App Store Connect', 'Google Play Console'],
-    };
+    final c = context.colors;
+    return DecoratedBox(
+      decoration: BoxDecoration(color: c.surface, border: Border.symmetric(horizontal: BorderSide(color: c.line))),
+      child: ContentWidth(
+        padding: const EdgeInsets.symmetric(vertical: 80),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Reveal(child: SectionHeading(eyebrow: '03 — Stack', title: 'What I work with')),
+            const SizedBox(height: 36),
+            LayoutBuilder(builder: (context, constraints) {
+              // Mirrors the reference's auto-fit minmax(250px, 1fr) with 20px gaps.
+              final w = constraints.maxWidth;
+              final columns = w >= 250 * 4 + 60 ? 4 : (w >= 250 * 2 + 20 ? 2 : 1);
+              return EqualHeightGrid(
+                columns: columns,
+                spacing: 20,
+                runSpacing: 20,
+                stagger: true,
+                children: [for (final g in _groups) _StackCard(group: g)],
+              );
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-    return GlassContainer(
+class _StackCard extends StatelessWidget {
+  const _StackCard({required this.group});
+
+  final _StackGroup group;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final f = group.featured;
+    return OutlinedCard(
+      interactive: true,
+      padding: const EdgeInsets.all(24),
+      radius: PortfolioLayout.smallCardRadius,
+      color: f ? c.band : c.surface,
+      showBorder: !f,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(Icons.code, color: Theme.of(context).primaryColor),
-              const SizedBox(width: 12),
-              Text('Technical Skills', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
-            ],
-          ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.1, end: 0),
-          const SizedBox(height: 24),
-          ...skills.entries.toList().asMap().entries.map((categoryEntry) {
-            final categoryIndex = categoryEntry.key;
-            final entry = categoryEntry.value;
-            
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(entry.key, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold))
-                      .animate().fadeIn(delay: (200 * categoryIndex).ms, duration: 400.ms),
-                  const SizedBox(height: 12),
-                  Wrap(
-                    spacing: 12.0,
-                    runSpacing: 12.0,
-                    children: entry.value.asMap().entries.map((skillEntry) {
-                      final skillIndex = skillEntry.key;
-                      final skill = skillEntry.value;
-                      
-                      return Chip(
-                        label: Text(skill, style: const TextStyle(fontWeight: FontWeight.w500)),
-                        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
-                        side: BorderSide(color: Theme.of(context).primaryColor.withOpacity(0.3)),
-                      ).animate()
-                       .fadeIn(delay: (200 * categoryIndex + 50 * skillIndex).ms, duration: 400.ms)
-                       .scale(begin: const Offset(0.8, 0.8), end: const Offset(1, 1), curve: Curves.easeOutBack);
-                    }).toList(),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
+          Text(group.label, style: PortfolioType.mono(size: 12, color: f ? c.bandAccent : c.inkSubtle)),
+          const SizedBox(height: 12),
+          Text(group.title, style: PortfolioType.display(20, letterSpacing: 0, height: 1.3, color: f ? c.onBand : c.ink)),
+          const SizedBox(height: 12),
+          Text(group.items.join(' · '), style: PortfolioType.body(size: 15, color: f ? c.onBandMuted : c.inkMuted)),
         ],
       ),
     );

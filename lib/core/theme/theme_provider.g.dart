@@ -6,9 +6,11 @@ part of 'theme_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$themeModeNotifierHash() => r'43d6e9650fc702b25d698d8ac8f9de8baf317da8';
+String _$themeModeNotifierHash() => r'eb09f67b610e09a8182c357a53ae2bec4784042b';
 
-/// See also [ThemeModeNotifier].
+/// Follows the OS setting until the visitor uses the toggle.
+///
+/// Copied from [ThemeModeNotifier].
 @ProviderFor(ThemeModeNotifier)
 final themeModeNotifierProvider =
     AutoDisposeNotifierProvider<ThemeModeNotifier, ThemeMode>.internal(

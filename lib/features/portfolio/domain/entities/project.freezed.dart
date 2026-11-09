@@ -24,10 +24,26 @@ mixin _$Project {
   String get title => throw _privateConstructorUsedError;
   String get role => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
-  List<String> get techStack => throw _privateConstructorUsedError;
+  List<String> get techStack =>
+      throw _privateConstructorUsedError; // Kept so older Firestore docs still parse; no longer rendered.
   List<String> get impactMetrics => throw _privateConstructorUsedError;
   String get liveLink => throw _privateConstructorUsedError;
   int? get order => throw _privateConstructorUsedError;
+
+  /// 'featured' | 'case' | 'more'
+  String get tier => throw _privateConstructorUsedError;
+
+  /// e.g. "Client project · Complete system build · Mobile + web"
+  String? get meta => throw _privateConstructorUsedError;
+
+  /// Card H3. Falls back to [title] when null.
+  String? get headline => throw _privateConstructorUsedError;
+  List<String> get highlights => throw _privateConstructorUsedError;
+
+  /// e.g. 'assets/projects/bryde.webp'. A placeholder renders if missing.
+  String? get imageAsset => throw _privateConstructorUsedError;
+  String? get appStoreLink => throw _privateConstructorUsedError;
+  String? get playStoreLink => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +63,14 @@ abstract class $ProjectCopyWith<$Res> {
       List<String> techStack,
       List<String> impactMetrics,
       String liveLink,
-      int? order});
+      int? order,
+      String tier,
+      String? meta,
+      String? headline,
+      List<String> highlights,
+      String? imageAsset,
+      String? appStoreLink,
+      String? playStoreLink});
 }
 
 /// @nodoc
@@ -71,6 +94,13 @@ class _$ProjectCopyWithImpl<$Res, $Val extends Project>
     Object? impactMetrics = null,
     Object? liveLink = null,
     Object? order = freezed,
+    Object? tier = null,
+    Object? meta = freezed,
+    Object? headline = freezed,
+    Object? highlights = null,
+    Object? imageAsset = freezed,
+    Object? appStoreLink = freezed,
+    Object? playStoreLink = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -105,6 +135,34 @@ class _$ProjectCopyWithImpl<$Res, $Val extends Project>
           ? _value.order
           : order // ignore: cast_nullable_to_non_nullable
               as int?,
+      tier: null == tier
+          ? _value.tier
+          : tier // ignore: cast_nullable_to_non_nullable
+              as String,
+      meta: freezed == meta
+          ? _value.meta
+          : meta // ignore: cast_nullable_to_non_nullable
+              as String?,
+      headline: freezed == headline
+          ? _value.headline
+          : headline // ignore: cast_nullable_to_non_nullable
+              as String?,
+      highlights: null == highlights
+          ? _value.highlights
+          : highlights // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      imageAsset: freezed == imageAsset
+          ? _value.imageAsset
+          : imageAsset // ignore: cast_nullable_to_non_nullable
+              as String?,
+      appStoreLink: freezed == appStoreLink
+          ? _value.appStoreLink
+          : appStoreLink // ignore: cast_nullable_to_non_nullable
+              as String?,
+      playStoreLink: freezed == playStoreLink
+          ? _value.playStoreLink
+          : playStoreLink // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -124,7 +182,14 @@ abstract class _$$ProjectImplCopyWith<$Res> implements $ProjectCopyWith<$Res> {
       List<String> techStack,
       List<String> impactMetrics,
       String liveLink,
-      int? order});
+      int? order,
+      String tier,
+      String? meta,
+      String? headline,
+      List<String> highlights,
+      String? imageAsset,
+      String? appStoreLink,
+      String? playStoreLink});
 }
 
 /// @nodoc
@@ -146,6 +211,13 @@ class __$$ProjectImplCopyWithImpl<$Res>
     Object? impactMetrics = null,
     Object? liveLink = null,
     Object? order = freezed,
+    Object? tier = null,
+    Object? meta = freezed,
+    Object? headline = freezed,
+    Object? highlights = null,
+    Object? imageAsset = freezed,
+    Object? appStoreLink = freezed,
+    Object? playStoreLink = freezed,
   }) {
     return _then(_$ProjectImpl(
       id: null == id
@@ -180,6 +252,34 @@ class __$$ProjectImplCopyWithImpl<$Res>
           ? _value.order
           : order // ignore: cast_nullable_to_non_nullable
               as int?,
+      tier: null == tier
+          ? _value.tier
+          : tier // ignore: cast_nullable_to_non_nullable
+              as String,
+      meta: freezed == meta
+          ? _value.meta
+          : meta // ignore: cast_nullable_to_non_nullable
+              as String?,
+      headline: freezed == headline
+          ? _value.headline
+          : headline // ignore: cast_nullable_to_non_nullable
+              as String?,
+      highlights: null == highlights
+          ? _value._highlights
+          : highlights // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      imageAsset: freezed == imageAsset
+          ? _value.imageAsset
+          : imageAsset // ignore: cast_nullable_to_non_nullable
+              as String?,
+      appStoreLink: freezed == appStoreLink
+          ? _value.appStoreLink
+          : appStoreLink // ignore: cast_nullable_to_non_nullable
+              as String?,
+      playStoreLink: freezed == playStoreLink
+          ? _value.playStoreLink
+          : playStoreLink // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -193,11 +293,19 @@ class _$ProjectImpl implements _Project {
       required this.role,
       required this.description,
       required final List<String> techStack,
-      required final List<String> impactMetrics,
-      required this.liveLink,
-      this.order})
+      final List<String> impactMetrics = const <String>[],
+      this.liveLink = '',
+      this.order,
+      this.tier = 'more',
+      this.meta,
+      this.headline,
+      final List<String> highlights = const <String>[],
+      this.imageAsset,
+      this.appStoreLink,
+      this.playStoreLink})
       : _techStack = techStack,
-        _impactMetrics = impactMetrics;
+        _impactMetrics = impactMetrics,
+        _highlights = highlights;
 
   factory _$ProjectImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProjectImplFromJson(json);
@@ -218,8 +326,11 @@ class _$ProjectImpl implements _Project {
     return EqualUnmodifiableListView(_techStack);
   }
 
+// Kept so older Firestore docs still parse; no longer rendered.
   final List<String> _impactMetrics;
+// Kept so older Firestore docs still parse; no longer rendered.
   @override
+  @JsonKey()
   List<String> get impactMetrics {
     if (_impactMetrics is EqualUnmodifiableListView) return _impactMetrics;
     // ignore: implicit_dynamic_type
@@ -227,13 +338,43 @@ class _$ProjectImpl implements _Project {
   }
 
   @override
+  @JsonKey()
   final String liveLink;
   @override
   final int? order;
 
+  /// 'featured' | 'case' | 'more'
+  @override
+  @JsonKey()
+  final String tier;
+
+  /// e.g. "Client project · Complete system build · Mobile + web"
+  @override
+  final String? meta;
+
+  /// Card H3. Falls back to [title] when null.
+  @override
+  final String? headline;
+  final List<String> _highlights;
+  @override
+  @JsonKey()
+  List<String> get highlights {
+    if (_highlights is EqualUnmodifiableListView) return _highlights;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_highlights);
+  }
+
+  /// e.g. 'assets/projects/bryde.webp'. A placeholder renders if missing.
+  @override
+  final String? imageAsset;
+  @override
+  final String? appStoreLink;
+  @override
+  final String? playStoreLink;
+
   @override
   String toString() {
-    return 'Project(id: $id, title: $title, role: $role, description: $description, techStack: $techStack, impactMetrics: $impactMetrics, liveLink: $liveLink, order: $order)';
+    return 'Project(id: $id, title: $title, role: $role, description: $description, techStack: $techStack, impactMetrics: $impactMetrics, liveLink: $liveLink, order: $order, tier: $tier, meta: $meta, headline: $headline, highlights: $highlights, imageAsset: $imageAsset, appStoreLink: $appStoreLink, playStoreLink: $playStoreLink)';
   }
 
   @override
@@ -252,7 +393,19 @@ class _$ProjectImpl implements _Project {
                 .equals(other._impactMetrics, _impactMetrics) &&
             (identical(other.liveLink, liveLink) ||
                 other.liveLink == liveLink) &&
-            (identical(other.order, order) || other.order == order));
+            (identical(other.order, order) || other.order == order) &&
+            (identical(other.tier, tier) || other.tier == tier) &&
+            (identical(other.meta, meta) || other.meta == meta) &&
+            (identical(other.headline, headline) ||
+                other.headline == headline) &&
+            const DeepCollectionEquality()
+                .equals(other._highlights, _highlights) &&
+            (identical(other.imageAsset, imageAsset) ||
+                other.imageAsset == imageAsset) &&
+            (identical(other.appStoreLink, appStoreLink) ||
+                other.appStoreLink == appStoreLink) &&
+            (identical(other.playStoreLink, playStoreLink) ||
+                other.playStoreLink == playStoreLink));
   }
 
   @JsonKey(ignore: true)
@@ -266,7 +419,14 @@ class _$ProjectImpl implements _Project {
       const DeepCollectionEquality().hash(_techStack),
       const DeepCollectionEquality().hash(_impactMetrics),
       liveLink,
-      order);
+      order,
+      tier,
+      meta,
+      headline,
+      const DeepCollectionEquality().hash(_highlights),
+      imageAsset,
+      appStoreLink,
+      playStoreLink);
 
   @JsonKey(ignore: true)
   @override
@@ -289,9 +449,16 @@ abstract class _Project implements Project {
       required final String role,
       required final String description,
       required final List<String> techStack,
-      required final List<String> impactMetrics,
-      required final String liveLink,
-      final int? order}) = _$ProjectImpl;
+      final List<String> impactMetrics,
+      final String liveLink,
+      final int? order,
+      final String tier,
+      final String? meta,
+      final String? headline,
+      final List<String> highlights,
+      final String? imageAsset,
+      final String? appStoreLink,
+      final String? playStoreLink}) = _$ProjectImpl;
 
   factory _Project.fromJson(Map<String, dynamic> json) = _$ProjectImpl.fromJson;
 
@@ -305,12 +472,34 @@ abstract class _Project implements Project {
   String get description;
   @override
   List<String> get techStack;
-  @override
+  @override // Kept so older Firestore docs still parse; no longer rendered.
   List<String> get impactMetrics;
   @override
   String get liveLink;
   @override
   int? get order;
+  @override
+
+  /// 'featured' | 'case' | 'more'
+  String get tier;
+  @override
+
+  /// e.g. "Client project · Complete system build · Mobile + web"
+  String? get meta;
+  @override
+
+  /// Card H3. Falls back to [title] when null.
+  String? get headline;
+  @override
+  List<String> get highlights;
+  @override
+
+  /// e.g. 'assets/projects/bryde.webp'. A placeholder renders if missing.
+  String? get imageAsset;
+  @override
+  String? get appStoreLink;
+  @override
+  String? get playStoreLink;
   @override
   @JsonKey(ignore: true)
   _$$ProjectImplCopyWith<_$ProjectImpl> get copyWith =>

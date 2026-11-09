@@ -1,85 +1,117 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/portfolio_providers.dart';
-import 'glass_container.dart';
+import 'package:zamir_professional_portfolio/core/responsive_config.dart';
+import 'package:zamir_professional_portfolio/core/theme/app_theme.dart';
+import 'package:zamir_professional_portfolio/features/portfolio/domain/entities/experience.dart';
+import 'package:zamir_professional_portfolio/features/portfolio/presentation/providers/portfolio_providers.dart';
+import 'common.dart';
 
+/// "02 — Experience": heading on the left, dated list on the right.
 class ExperienceTimeline extends ConsumerWidget {
   const ExperienceTimeline({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final c = context.colors;
     final experienceAsync = ref.watch(experienceProvider);
 
-    return experienceAsync.when(
-      data: (experiences) {
-        if (experiences.isEmpty) return const SizedBox.shrink();
-        
-        return GlassContainer(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+    const heading = SectionHeading(
+      eyebrow: '02 — Experience',
+      title: 'From intern to senior, shipping the whole way',
+    );
+
+    final list = experienceAsync.when(
+      loading: () => Padding(
+        padding: const EdgeInsets.all(24),
+        child: Center(child: CircularProgressIndicator(color: c.accent)),
+      ),
+      error: (err, _) => Text('Could not load experience: $err', style: PortfolioType.body(color: c.accentText)),
+      data: (items) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (var i = 0; i < items.length; i++)
+            Reveal(
+              delay: Duration(milliseconds: 70 * i),
+              child: _ExperienceRow(item: items[i], isLast: i == items.length - 1),
+            ),
+        ],
+      ),
+    );
+
+    return ContentWidth(
+      padding: const EdgeInsets.symmetric(vertical: 72),
+      child: ResponsiveConfig.isDesktop(context)
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Expanded(child: Reveal(child: heading)),
+                const SizedBox(width: 48),
+                Expanded(flex: 2, child: list),
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [const Reveal(child: heading), const SizedBox(height: 48), list],
+            ),
+    );
+  }
+}
+
+class _ExperienceRow extends StatelessWidget {
+  const _ExperienceRow({required this.item, required this.isLast});
+
+  final Experience item;
+  final bool isLast;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final border = BorderSide(color: c.line);
+
+    return Hoverable(builder: (context, hovered) {
+      final date = Padding(
+        padding: const EdgeInsets.only(top: 4),
+        child: AnimatedDefaultTextStyle(
+          duration: PortfolioMotion.fast,
+          style: PortfolioType.mono(color: hovered ? c.accent : c.inkSubtle),
+          child: Text(item.period),
+        ),
+      );
+      final body = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('${item.position} · ${item.company}', style: PortfolioType.body(size: 18, weight: FontWeight.w700, height: 1.4, color: c.ink)),
+          if (item.accomplishments.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            Text(item.accomplishments.first, style: PortfolioType.body(color: c.inkMuted)),
+          ],
+        ],
+      );
+
+      return Container(
+        padding: const EdgeInsets.symmetric(vertical: 22),
+        decoration: BoxDecoration(border: Border(top: border, bottom: isLast ? border : BorderSide.none)),
+        child: ResponsiveConfig.isMobile(context)
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [date, const SizedBox(height: 6), body],
+              )
+            : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.work, color: Theme.of(context).primaryColor),
-                  const SizedBox(width: 12),
-                  Text('Professional Experience', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+                  SizedBox(width: 170, child: date),
+                  const SizedBox(width: 24),
+                  Expanded(
+                    child: AnimatedSlide(
+                      offset: hovered && !context.reduceMotion ? const Offset(0.01, 0) : Offset.zero,
+                      duration: PortfolioMotion.medium,
+                      curve: PortfolioMotion.ease,
+                      child: body,
+                    ),
+                  ),
                 ],
               ),
-              const SizedBox(height: 32),
-              ...experiences.map((exp) => Padding(
-                padding: const EdgeInsets.only(bottom: 32.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          width: 16,
-                          height: 16,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        Container(
-                          width: 2,
-                          height: 10 + (exp.accomplishments.join("").length * 0.5).clamp(80.0, 300.0), // Dynamic trace line
-                          color: Theme.of(context).primaryColor.withOpacity(0.3),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 24),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(exp.position, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 4),
-                          Text('${exp.company} • ${exp.period}', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).primaryColor)),
-                          const SizedBox(height: 16),
-                          ...exp.accomplishments.map((acc) => Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(Icons.arrow_right, size: 20, color: Theme.of(context).primaryColor),
-                                const SizedBox(width: 8),
-                                Expanded(child: Text(acc, style: Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.5))),
-                              ],
-                            ),
-                          )).toList(),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )).toList(),
-            ],
-          ),
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Text('Error loading experience: $err', style: const TextStyle(color: Colors.red)),
-    );
+      );
+    });
   }
 }

@@ -12,7 +12,9 @@ DataService dataService(DataServiceRef ref) {
   return DataService(
     firestoreRepo: FirestorePortfolioRepository(),
     jsonRepo: JsonPortfolioRepository(),
-    useFirestore: true, // Now fetching from live Firebase streams natively
+    // Live Firestore by default. For local checks against the JSON seed:
+    // flutter run --dart-define=USE_FIRESTORE=false
+    useFirestore: const bool.fromEnvironment('USE_FIRESTORE', defaultValue: true),
   );
 }
 
